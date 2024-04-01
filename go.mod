@@ -1,4 +1,4 @@
-module github.com/dgorb/wikitr
+module github.com/dgorb/wikitranslate
 
 go 1.21
 

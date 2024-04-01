@@ -4,29 +4,41 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/dgorb/wikitranslate/utils"
 	"github.com/gocolly/colly"
 )
 
 func main() {
 	c := colly.NewCollector()
+	fmt.Println(translate(c, "en", "uk", "Guitar"))
+}
 
-	inputLang := "en"
-	outputLang := "ru"
+type Translator struct {
+	Promt          string   `json:"prompt"`
+	AvailableLangs []string `json:"availableLanguages"`
+}
 
-	input := "Guitar"
+func makeUrl(lang, text string) string {
+	return fmt.Sprintf("https://%s.wikipedia.org/wiki/%s", lang, text)
+}
+
+func translate(c *colly.Collector, inputLang, outputLang, input string) string {
+	url := makeUrl(inputLang, input)
+	var translation string
+	availableLanguages := map[string]string{}
 
 	c.OnHTML(`.interlanguage-link-target`, func(e *colly.HTMLElement) {
-		if e.Attr("lang") == outputLang {
-			fmt.Printf("%s -> %s\n", inputLang, outputLang)
-			fmt.Printf("%s -> %s\n", input, strings.Split(e.Attr("title"), " – ")[0])
-			fmt.Println(e.Attr("href"))
+		langCode := e.Attr("lang")
 
-			// If we find translation, visit the link and pull
-			// up the first paragraph
-			// fmt.Println(e.ChildText("p"))
+		availableLanguages[langCode] = utils.LanguageByCode(langCode)
+		if langCode == outputLang {
+			translation = strings.Split(e.Attr("title"), " – ")[0]
 		}
-
 	})
 
-	c.Visit(fmt.Sprintf("https://%s.wikipedia.org/wiki/%s", inputLang, input))
+	c.Visit(url)
+
+	fmt.Println(availableLanguages)
+
+	return translation
 }
