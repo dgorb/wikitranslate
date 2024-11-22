@@ -8,6 +8,11 @@ func LanguageByCode(code string) string {
 	return languageMap[code]
 }
 
+func ValidLanguage(code string) bool {
+	_, valid := languageMap[code]
+	return valid
+}
+
 var languageMap = map[string]string{
 	"af":           "Afrikaans",
 	"als":          "Alemannic",
