@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Wiki Translator</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 20px;
+                background-color: #f5f5f5;
+            }
+
+            .container {
+                background-color: white;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+
+            .translation-form {
+                display: grid;
+                gap: 20px;
+            }
+
+            .language-selectors {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
+
+            .form-group {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            label {
+                font-weight: bold;
+                color: #333;
+            }
+
+            select,
+            input {
+                padding: 8px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                font-size: 16px;
+            }
+
+            button {
+                padding: 10px 20px;
+                background-color: #007bff;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 16px;
+            }
+
+            button:hover {
+                background-color: #0056b3;
+            }
+
+            #result {
+                margin-top: 20px;
+                padding: 15px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                background-color: #f8f9fa;
+            }
+
+            .error {
+                color: #dc3545;
+                margin-top: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Wiki Translator</h1>
+            <div class="translation-form">
+                <div class="language-selectors">
+                    <div class="form-group">
+                        <label for="inputLang">From Language:</label>
+                        <select id="inputLang"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="outputLang">To Language:</label>
+                        <select id="outputLang"></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="input">Word to translate:</label>
+                    <input
+                        type="text"
+                        id="input"
+                        placeholder="Enter word or phrase"
+                    />
+                </div>
+                <button onclick="performTranslation()">Translate</button>
+                <div id="result"></div>
+            </div>
+        </div>
+        <script>
+            let languages = {};
+            async function populateLanguageDropdowns() {
+                try {
+                    const response = await fetch("/languages");
+                    if (!response.ok) {
+                        throw new Error("Failed to fetch languages");
+                    }
+                    languages = await response.json();
+
+                    const inputLang = document.getElementById("inputLang");
+                    const outputLang = document.getElementById("outputLang");
+
+                    inputLang.innerHTML = "";
+                    outputLang.innerHTML = "";
+
+                    const sortedLanguages = Object.entries(languages).sort(
+                        (a, b) => a[1].localeCompare(b[1]),
+                    );
+
+                    for (const [code, name] of sortedLanguages) {
+                        const option1 = new Option(name, code);
+                        const option2 = new Option(name, code);
+
+                        inputLang.add(option1);
+                        outputLang.add(option2);
+
+                        // Default languages
+                        // TODO: Look into storing top preferred languages
+                        if (code === "en") inputLang.value = code;
+                        if (code === "es") outputLang.value = code;
+                    }
+                } catch (error) {
+                    console.error("Error loading languages:", error);
+                    document.getElementById("result").innerHTML =
+                        `<div class="error">Error loading languages: ${error.message}</div>`;
+                }
+            }
+
+            async function performTranslation() {
+                const inputLang = document.getElementById("inputLang").value;
+                const outputLang = document.getElementById("outputLang").value;
+                const input = document.getElementById("input").value;
+                const resultDiv = document.getElementById("result");
+
+                if (!input.trim()) {
+                    resultDiv.innerHTML =
+                        '<div class="error">Please enter a word to translate</div>';
+                    return;
+                }
+
+                try {
+                    const response = await fetch(
+                        `/translate?inputLang=${inputLang}&outputLang=${outputLang}&input=${encodeURIComponent(input)}`,
+                    );
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        resultDiv.innerHTML = `
+                            <strong>Translation:</strong>
+                            <div>${data.translation}</div>
+                        `;
+                    } else {
+                        resultDiv.innerHTML = `<div class="error">${data.error || "Translation failed"}</div>`;
+                    }
+                } catch (error) {
+                    resultDiv.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+                }
+            }
+
+            document.addEventListener(
+                "DOMContentLoaded",
+                populateLanguageDropdowns,
+            );
+        </script>
+    </body>
+</html>

@@ -10,6 +10,11 @@ import (
 	"github.com/gocolly/colly"
 )
 
+func GetLanguagesHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(utils.Languages())
+}
+
 func TranslateHandler(w http.ResponseWriter, r *http.Request) {
 	inputLang := r.URL.Query().Get("inputLang")
 	outputLang := r.URL.Query().Get("outputLang")
