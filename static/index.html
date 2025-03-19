@@ -128,7 +128,7 @@
 
                     if (response.ok) {
                         resultDiv.innerHTML = `
-                            <div class="font-light">${data.translation}</div>
+                            <div class="font-light">${input.charAt(0).toUpperCase() + input.slice(1)} (${inputLang})  →  ${data.translation} (${outputLang})</div>
                         `;
                     } else {
                         resultDiv.innerHTML = `<div class="text-red-600">${data.error || "Translation failed"}</div>`;
