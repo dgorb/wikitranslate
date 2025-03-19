@@ -3,6 +3,7 @@ package web
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/dgorb/wikitranslate/service"
@@ -38,6 +39,7 @@ func TranslateHandler(w http.ResponseWriter, r *http.Request) {
 	c := colly.NewCollector()
 	translation, err := service.Translate(c, inputLang, outputLang, input)
 	if err != nil {
+		log.Printf("Error translating: %s", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

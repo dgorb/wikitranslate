@@ -26,7 +26,6 @@ func Translate(c *colly.Collector, inputLang, outputLang, input string) (string,
 			translation = strings.Split(e.Attr("title"), " – ")[0]
 		}
 	})
-
 	err := c.Visit(url)
 	if err != nil {
 		return "", err

@@ -97,7 +97,7 @@
                         outputLang.add(option2);
 
                         if (code === "en") inputLang.value = code;
-                        if (code === "es") outputLang.value = code;
+                        if (code === "nb") outputLang.value = code;
                     }
                 } catch (error) {
                     console.error("Error loading languages:", error);
@@ -125,16 +125,15 @@
                         `/translate?inputLang=${inputLang}&outputLang=${outputLang}&input=${encodeURIComponent(input)}`,
                     );
                     const data = await response.json();
-
                     if (response.ok) {
                         resultDiv.innerHTML = `
                             <div class="font-light">${input.charAt(0).toUpperCase() + input.slice(1)} (${inputLang})  →  ${data.translation} (${outputLang})</div>
                         `;
                     } else {
-                        resultDiv.innerHTML = `<div class="text-red-600">${data.error || "Translation failed"}</div>`;
+                        resultDiv.innerHTML = `<div class="text-red-600">Translation failed</div>`;
                     }
                 } catch (error) {
-                    resultDiv.innerHTML = `<div class="text-red-600">Error: ${error.message}</div>`;
+                    resultDiv.innerHTML = `<div class="text-red-600">Translation not found</div>`;
                 }
             }
 
