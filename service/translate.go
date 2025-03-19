@@ -32,7 +32,7 @@ func Translate(c *colly.Collector, inputLang, outputLang, input string) (string,
 		return "", err
 	}
 
-	if (translation == "") {
+	if translation == "" {
 		return "", errors.New("Translation not found")
 	}
 

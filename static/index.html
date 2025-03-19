@@ -3,105 +3,70 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Wiki Translator</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                max-width: 800px;
-                margin: 0 auto;
-                padding: 20px;
-                background-color: #f5f5f5;
-            }
-
-            .container {
-                background-color: white;
-                padding: 20px;
-                border-radius: 8px;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            }
-
-            .translation-form {
-                display: grid;
-                gap: 20px;
-            }
-
-            .language-selectors {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 20px;
-            }
-
-            .form-group {
-                display: flex;
-                flex-direction: column;
-                gap: 8px;
-            }
-
-            label {
-                font-weight: bold;
-                color: #333;
-            }
-
-            select,
-            input {
-                padding: 8px;
-                border: 1px solid #ddd;
-                border-radius: 4px;
-                font-size: 16px;
-            }
-
-            button {
-                padding: 10px 20px;
-                background-color: #007bff;
-                color: white;
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;
-                font-size: 16px;
-            }
-
-            button:hover {
-                background-color: #0056b3;
-            }
-
-            #result {
-                margin-top: 20px;
-                padding: 15px;
-                border: 1px solid #ddd;
-                border-radius: 4px;
-                background-color: #f8f9fa;
-            }
-
-            .error {
-                color: #dc3545;
-                margin-top: 10px;
-            }
-        </style>
+        <title>wikitranslate</title>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script>
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        fontFamily: {
+                            sans: ["Inter", "sans-serif"],
+                        },
+                    },
+                },
+            };
+        </script>
     </head>
-    <body>
-        <div class="container">
-            <h1>Wiki Translator</h1>
-            <div class="translation-form">
-                <div class="language-selectors">
-                    <div class="form-group">
-                        <label for="inputLang">From Language:</label>
-                        <select id="inputLang"></select>
+    <body class="bg-gray-100 font-extralight">
+        <div class="w-full bg-off-white bg-gray-50 shadow-md">
+            <h1
+                class="text-xl mb-6 lowercase py-4 pl-14 border-b-[1px] border-blue-200"
+            >
+                Wikitranslate
+            </h1>
+        </div>
+        <div class="max-w-3xl mx-auto p-5">
+            <div
+                class="bg-white p-6 rounded-md shadow-lg border-[1px] border-blue-200 inset-shadow-sm shadow-[0_4px_0_0_rgba(0,0,0,0.2)]"
+            >
+                <div class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="flex flex-col">
+                            <select
+                                id="inputLang"
+                                class="p-2 border border-gray-300 rounded-sm shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            ></select>
+                        </div>
+                        <div class="flex flex-col">
+                            <select
+                                id="outputLang"
+                                class="p-2 border border-gray-300 rounded-sm shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            ></select>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="outputLang">To Language:</label>
-                        <select id="outputLang"></select>
+                    <div class="flex flex-col">
+                        <input
+                            type="text"
+                            id="input"
+                            placeholder="Enter word or phrase"
+                            class="p-2 border border-gray-300 rounded-sm shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
                     </div>
+                    <button
+                        onclick="performTranslation()"
+                        class="w-full bg-blue-200 text-black py-2 px-4 rounded-sm shadow-md border border-[1px] border-blue-300 hover:bg-blue-300 hover:border-blue-400 transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                        Translate
+                    </button>
+                    <div
+                        id="result"
+                        class="mt-4 p-4 border border-[1px] shadow-md border-gray-200 rounded-sm bg-gray-50 hidden"
+                    ></div>
                 </div>
-                <div class="form-group">
-                    <label for="input">Word to translate:</label>
-                    <input
-                        type="text"
-                        id="input"
-                        placeholder="Enter word or phrase"
-                    />
-                </div>
-                <button onclick="performTranslation()">Translate</button>
-                <div id="result"></div>
             </div>
         </div>
         <script>
@@ -131,15 +96,14 @@
                         inputLang.add(option1);
                         outputLang.add(option2);
 
-                        // Default languages
-                        // TODO: Look into storing top preferred languages
                         if (code === "en") inputLang.value = code;
                         if (code === "es") outputLang.value = code;
                     }
                 } catch (error) {
                     console.error("Error loading languages:", error);
-                    document.getElementById("result").innerHTML =
-                        `<div class="error">Error loading languages: ${error.message}</div>`;
+                    const resultDiv = document.getElementById("result");
+                    resultDiv.classList.remove("hidden");
+                    resultDiv.innerHTML = `<div class="text-red-600">Error loading languages: ${error.message}</div>`;
                 }
             }
 
@@ -148,10 +112,11 @@
                 const outputLang = document.getElementById("outputLang").value;
                 const input = document.getElementById("input").value;
                 const resultDiv = document.getElementById("result");
+                resultDiv.classList.remove("hidden");
 
                 if (!input.trim()) {
                     resultDiv.innerHTML =
-                        '<div class="error">Please enter a word to translate</div>';
+                        '<div class="text-red-600">Please enter a word to translate</div>';
                     return;
                 }
 
@@ -163,14 +128,13 @@
 
                     if (response.ok) {
                         resultDiv.innerHTML = `
-                            <strong>Translation:</strong>
-                            <div>${data.translation}</div>
+                            <div class="font-light">${data.translation}</div>
                         `;
                     } else {
-                        resultDiv.innerHTML = `<div class="error">${data.error || "Translation failed"}</div>`;
+                        resultDiv.innerHTML = `<div class="text-red-600">${data.error || "Translation failed"}</div>`;
                     }
                 } catch (error) {
-                    resultDiv.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+                    resultDiv.innerHTML = `<div class="text-red-600">Error: ${error.message}</div>`;
                 }
             }
 
