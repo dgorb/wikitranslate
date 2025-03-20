@@ -14,7 +14,9 @@ func NewRouter() *chi.Mux {
 	r.Use(middleware.Logger)
 
 	// Serve static files
-	r.Handle("/", http.FileServer(http.Dir("static")))
+	fileServer := http.FileServer(http.Dir("static"))
+	r.Handle("/", fileServer)
+	r.Handle("/scripts.js", fileServer)
 
 	// API endpoints
 	r.Get("/languages", GetLanguagesHandler)

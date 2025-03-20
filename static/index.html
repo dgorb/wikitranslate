@@ -8,6 +8,7 @@
             href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&display=swap"
             rel="stylesheet"
         />
+        <script src="/scripts.js"></script>
         <script src="https://cdn.tailwindcss.com"></script>
         <script>
             tailwind.config = {
@@ -67,78 +68,5 @@
                 </div>
             </div>
         </div>
-        <script>
-            let languages = {};
-            async function populateLanguageDropdowns() {
-                try {
-                    const response = await fetch("/languages");
-                    if (!response.ok) {
-                        throw new Error("Failed to fetch languages");
-                    }
-                    languages = await response.json();
-
-                    const inputLang = document.getElementById("inputLang");
-                    const outputLang = document.getElementById("outputLang");
-
-                    inputLang.innerHTML = "";
-                    outputLang.innerHTML = "";
-
-                    const sortedLanguages = Object.entries(languages).sort(
-                        (a, b) => a[1].localeCompare(b[1]),
-                    );
-
-                    for (const [code, name] of sortedLanguages) {
-                        const option1 = new Option(name, code);
-                        const option2 = new Option(name, code);
-
-                        inputLang.add(option1);
-                        outputLang.add(option2);
-
-                        if (code === "en") inputLang.value = code;
-                        if (code === "nb") outputLang.value = code;
-                    }
-                } catch (error) {
-                    console.error("Error loading languages:", error);
-                    const resultDiv = document.getElementById("result");
-                    resultDiv.classList.remove("hidden");
-                    resultDiv.innerHTML = `<div class="text-red-600">Error loading languages: ${error.message}</div>`;
-                }
-            }
-
-            async function performTranslation() {
-                const inputLang = document.getElementById("inputLang").value;
-                const outputLang = document.getElementById("outputLang").value;
-                const input = document.getElementById("input").value;
-                const resultDiv = document.getElementById("result");
-                resultDiv.classList.remove("hidden");
-
-                if (!input.trim()) {
-                    resultDiv.innerHTML =
-                        '<div class="text-red-600">Please enter a word to translate</div>';
-                    return;
-                }
-
-                try {
-                    const response = await fetch(
-                        `/translate?inputLang=${inputLang}&outputLang=${outputLang}&input=${encodeURIComponent(input)}`,
-                    );
-                    const data = await response.json();
-                    if (response.ok) {
-                        resultDiv.innerHTML = `
-                            <div class="font-light">${input.charAt(0).toUpperCase() + input.slice(1)} (${inputLang})  →  ${data.translation} (${outputLang})</div>
-                        `;
-                    } else {
-                        resultDiv.innerHTML = `<div class="text-red-600">Translation failed</div>`;
-                    }
-                } catch (error) {
-                    resultDiv.innerHTML = `<div class="text-red-600">Translation not found</div>`;
-                }
-            }
-
-            document.addEventListener(
-                "DOMContentLoaded",
-                populateLanguageDropdowns,
-            );
-        </script>
     </body>
 </html>
