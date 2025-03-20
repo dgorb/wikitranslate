@@ -25,8 +25,14 @@ async function populateLanguageDropdowns() {
       inputLang.add(option1);
       outputLang.add(option2);
 
-      if (code === "en") inputLang.value = code;
-      if (code === "nb") outputLang.value = code;
+      inputLang.value =
+        code === "en"
+          ? code
+          : localStorage.getItem("lastInputLang") || inputLang.value;
+      outputLang.value =
+        code === "nb"
+          ? code
+          : localStorage.getItem("lastOutputLang") || outputLang.value;
     }
   } catch (error) {
     console.error("Error loading languages:", error);
@@ -64,6 +70,9 @@ async function performTranslation() {
   } catch (error) {
     resultDiv.innerHTML = `<div class="text-red-600">Translation not found</div>`;
   }
+
+  localStorage.setItem("lastInputLang", inputLang);
+  localStorage.setItem("lastOutputLang", outputLang);
 }
 
 document.addEventListener("DOMContentLoaded", populateLanguageDropdowns);
