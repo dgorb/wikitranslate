@@ -57,8 +57,8 @@ func TranslateHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusOK)
 		return
 	}
-	fmt.Println(inputSummary)
-	outputSummary, err := service.GetSummary(c, outputLang, input)
+
+	outputSummary, err := service.GetSummary(c, outputLang, translation)
 	if err != nil {
 		log.Printf("Error getting summary: %s", err)
 		http.Error(w, err.Error(), http.StatusOK)
