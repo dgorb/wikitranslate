@@ -46,14 +46,10 @@ async function performTranslation() {
   const inputLang = document.getElementById("inputLang").value;
   const outputLang = document.getElementById("outputLang").value;
   const input = document.getElementById("input").value;
-  const resultDiv = document.getElementById("result");
-  resultDiv.classList.remove("hidden");
-
-  if (!input.trim()) {
-    resultDiv.innerHTML =
-      '<div class="text-red-600">Please enter a word to translate</div>';
-    return;
-  }
+  const resultsDiv = document.getElementById("results");
+  const translationDiv = document.getElementById("translation");
+  const summaryDiv = document.getElementById("summary");
+  resultsDiv.classList.remove("hidden");
 
   try {
     const response = await fetch(
@@ -61,14 +57,14 @@ async function performTranslation() {
     );
     const data = await response.json();
     if (response.ok) {
-      resultDiv.innerHTML = `
-                <div class="font-light">${input.charAt(0).toUpperCase() + input.slice(1)} (${inputLang})  →  ${data.translation} (${outputLang})</div>
-            `;
+      translationDiv.innerHTML = `${input.charAt(0).toUpperCase() + input.slice(1)} (${inputLang})  →  ${data.translation} (${outputLang})`;
+      summaryDiv.innerHTML = `${data.summary}`;
     } else {
-      resultDiv.innerHTML = `<div class="text-red-600">Translation failed</div>`;
+      resultsDiv.innerHTML = `<div class="text-red-600">Translation failed</div>`;
     }
   } catch (error) {
-    resultDiv.innerHTML = `<div class="text-red-600">Translation not found</div>`;
+    console.log(error);
+    resultsDiv.innerHTML = `<div class="text-red-600">Translation not found</div>`;
   }
 
   localStorage.setItem("lastInputLang", inputLang);
