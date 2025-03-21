@@ -40,7 +40,7 @@ func TranslateHandler(w http.ResponseWriter, r *http.Request) {
 	translation, err := service.Translate(c, inputLang, outputLang, input)
 	if err != nil {
 		log.Printf("Error translating: %s", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusOK)
 		return
 	}
 

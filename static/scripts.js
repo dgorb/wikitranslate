@@ -40,12 +40,15 @@ async function populateLanguageDropdowns() {
     resultDiv.classList.remove("hidden");
     resultDiv.innerHTML = `<div class="text-red-600">Error loading languages: ${error.message}</div>`;
   }
+
+  document.getElementById("input").focus();
 }
 
 async function performTranslation() {
   const inputLang = document.getElementById("inputLang").value;
   const outputLang = document.getElementById("outputLang").value;
-  const input = document.getElementById("input").value;
+  const input = document.getElementById("input");
+  const inputVal = input.value;
   const resultsDiv = document.getElementById("results");
   const translationDiv = document.getElementById("translation");
   const summaryDiv = document.getElementById("summary");
@@ -53,20 +56,23 @@ async function performTranslation() {
 
   try {
     const response = await fetch(
-      `/translate?inputLang=${inputLang}&outputLang=${outputLang}&input=${encodeURIComponent(input)}`,
+      `/translate?inputLang=${inputLang}&outputLang=${outputLang}&input=${encodeURIComponent(inputVal)}`,
     );
     const data = await response.json();
     if (response.ok) {
-      translationDiv.innerHTML = `${input.charAt(0).toUpperCase() + input.slice(1)} (${inputLang})  →  ${data.translation} (${outputLang})`;
+      translationDiv.innerHTML = `${inputVal.charAt(0).toUpperCase() + inputVal.slice(1)} (${inputLang})  →  ${data.translation} (${outputLang})`;
       summaryDiv.innerHTML = `${data.summary}`;
     } else {
-      resultsDiv.innerHTML = `<div class="text-red-600">Translation failed</div>`;
+      translationDiv.innerHTML = "Error translating";
+      summaryDiv.innerHTML = "";
     }
   } catch (error) {
-    console.log(error);
-    resultsDiv.innerHTML = `<div class="text-red-600">Translation not found</div>`;
+    translationDiv.innerHTML = "Translation not found";
+    summaryDiv.innerHTML = "";
   }
 
+  input.focus();
+  input.setSelectionRange(0, input.value.length);
   localStorage.setItem("lastInputLang", inputLang);
   localStorage.setItem("lastOutputLang", outputLang);
 }
