@@ -71,8 +71,12 @@ async function performTranslation() {
     summaryDiv.innerHTML = "";
   }
 
-  input.focus();
-  input.setSelectionRange(0, input.value.length);
+  input.value = "";
+  setTimeout(() => {
+    input.focus();
+    input.click();
+  }, 100);
+
   localStorage.setItem("lastInputLang", inputLang);
   localStorage.setItem("lastOutputLang", outputLang);
 }
