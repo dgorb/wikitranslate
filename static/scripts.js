@@ -59,9 +59,12 @@ async function performTranslation() {
       `/translate?inputLang=${inputLang}&outputLang=${outputLang}&input=${encodeURIComponent(inputVal)}`,
     );
     const data = await response.json();
+    console.log(data);
     if (response.ok) {
+      console.log(data);
       translationDiv.innerHTML = `${inputVal.charAt(0).toUpperCase() + inputVal.slice(1)} (${inputLang})  →  ${data.translation} (${outputLang})`;
-      summaryDiv.innerHTML = `${data.summary}`;
+      summaryDiv.innerHTML =
+        `${data.inputSummary}` + "<br><br>" + `${data.outputSummary}`;
     } else {
       translationDiv.innerHTML = "Error translating";
       summaryDiv.innerHTML = "";

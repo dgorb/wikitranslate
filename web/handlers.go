@@ -11,6 +11,12 @@ import (
 	"github.com/gocolly/colly"
 )
 
+type TranslationResponse struct {
+	Translation   string `json:"translation"`
+	InputSummary  string `json:"inputSummary"`
+	OutputSummary string `json:"outputSummary"`
+}
+
 func GetLanguagesHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(utils.Languages())
@@ -37,13 +43,32 @@ func TranslateHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	c := colly.NewCollector()
-	translation, err := service.Translate(c, inputLang, outputLang, input)
+	translation, err := service.GetTranslation(c, inputLang, outputLang, input)
 	if err != nil {
 		log.Printf("Error translating: %s", err)
 		http.Error(w, err.Error(), http.StatusOK)
 		return
 	}
 
+	c = colly.NewCollector()
+	inputSummary, err := service.GetSummary(c, inputLang, input)
+	if err != nil {
+		log.Printf("Error getting summary: %s", err)
+		http.Error(w, err.Error(), http.StatusOK)
+		return
+	}
+	fmt.Println(inputSummary)
+	outputSummary, err := service.GetSummary(c, outputLang, input)
+	if err != nil {
+		log.Printf("Error getting summary: %s", err)
+		http.Error(w, err.Error(), http.StatusOK)
+		return
+	}
+
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(translation)
+	json.NewEncoder(w).Encode(TranslationResponse{
+		Translation:   translation,
+		InputSummary:  inputSummary,
+		OutputSummary: outputSummary,
+	})
 }
