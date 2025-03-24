@@ -78,7 +78,6 @@ async function performTranslation() {
       `/api/translate?inputLang=${inputLang}&outputLang=${outputLang}&input=${encodeURIComponent(inputVal)}`,
     );
     const data = await response.json();
-    console.log(data);
     if (response.ok) {
       translationDiv.innerHTML = `${inputVal.charAt(0).toUpperCase() + inputVal.slice(1)} (${inputLang})  →  ${data.translation} (${outputLang})`;
 

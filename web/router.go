@@ -4,14 +4,12 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
 )
 
 func NewRouter() *chi.Mux {
 	r := chi.NewRouter()
 
-	// Middleware
-	r.Use(middleware.Logger)
+	SetupMiddleware(r)
 
 	// Serve static files
 	fileServer := http.FileServer(http.Dir("static"))

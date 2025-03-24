@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"net/url"
 	"regexp"
 	"strings"
 
@@ -58,5 +59,6 @@ func GetTranslation(c *colly.Collector, inputLang, outputLang, input string) (st
 }
 
 func makeUrl(lang, text string) string {
-	return fmt.Sprintf("https://%s.wikipedia.org/wiki/%s", lang, text)
+	encodedText := url.QueryEscape(text)
+	return fmt.Sprintf("https://%s.wikipedia.org/wiki/%s", lang, encodedText)
 }
