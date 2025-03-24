@@ -1,5 +1,4 @@
 let languages = {};
-let currentSummaryView = "output";
 
 async function populateLanguageDropdowns() {
   try {
@@ -45,19 +44,22 @@ async function populateLanguageDropdowns() {
   document.getElementById("input").focus();
 }
 
-function swapSummary() {
-  const summaryDiv = document.getElementById("summary");
-  const swapButton = document.getElementById("swapSummaryButton");
-  const inputSummary = summaryDiv.getAttribute("data-input-summary");
-  const outputSummary = summaryDiv.getAttribute("data-output-summary");
+async function swapLanguage() {
+  const inputLangSelect = document.getElementById("inputLang");
+  const outputLangSelect = document.getElementById("outputLang");
+  const inputEl = document.getElementById("input");
 
-  if (currentSummaryView === "output") {
-    summaryDiv.innerHTML = inputSummary;
-    currentSummaryView = "input";
-  } else {
-    summaryDiv.innerHTML = outputSummary;
-    currentSummaryView = "output";
-  }
+  const input = document
+    .getElementById("translation")
+    .getAttribute("data-translation");
+
+  [inputLangSelect.value, outputLangSelect.value] = [
+    outputLangSelect.value,
+    inputLangSelect.value,
+  ];
+  inputEl.value = input;
+
+  performTranslation();
 }
 
 async function performTranslation() {
@@ -79,12 +81,10 @@ async function performTranslation() {
     );
     const data = await response.json();
     if (response.ok) {
+      translationDiv.setAttribute("data-translation", data.translation);
       translationDiv.innerHTML = `${inputVal.charAt(0).toUpperCase() + inputVal.slice(1)} (${inputLang})  →  ${data.translation} (${outputLang})`;
 
-      summaryDiv.setAttribute("data-input-summary", data.inputSummary);
-      summaryDiv.setAttribute("data-output-summary", data.outputSummary);
-
-      summaryDiv.innerHTML = data.outputSummary;
+      summaryDiv.innerHTML = data.summary;
       currentSummaryView = "output";
       swapButton.textContent = "🔁";
     } else {
@@ -93,15 +93,11 @@ async function performTranslation() {
       swapButton.classList.add("hidden");
     }
   } catch (error) {
+    console.log(error);
     translationDiv.innerHTML = "Translation not found";
     summaryDiv.innerHTML = "";
     swapButton.classList.add("hidden");
   }
-
-  setTimeout(() => {
-    input.focus();
-    input.click();
-  }, 100);
 
   if (inputVal) {
     const newUrl = `/translate?inputLang=${inputLang}&outputLang=${outputLang}&input=${encodeURIComponent(inputVal)}`;

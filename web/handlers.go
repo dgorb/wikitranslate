@@ -12,9 +12,8 @@ import (
 )
 
 type TranslationResponse struct {
-	Translation   string `json:"translation"`
-	InputSummary  string `json:"inputSummary"`
-	OutputSummary string `json:"outputSummary"`
+	Translation string `json:"translation"`
+	Summary     string `json:"summary"`
 }
 
 func GetLanguagesHandler(w http.ResponseWriter, r *http.Request) {
@@ -47,6 +46,7 @@ func TranslateHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	c := colly.NewCollector()
+
 	translation, err := service.GetTranslation(c, inputLang, outputLang, input)
 	if err != nil {
 		log.Printf("Error translating: %s", err)
@@ -54,15 +54,7 @@ func TranslateHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	c = colly.NewCollector()
-	inputSummary, err := service.GetSummary(c, inputLang, input)
-	if err != nil {
-		log.Printf("Error getting summary: %s", err)
-		http.Error(w, err.Error(), http.StatusOK)
-		return
-	}
-
-	outputSummary, err := service.GetSummary(c, outputLang, translation)
+	summary, err := service.GetSummary(c, outputLang, translation)
 	if err != nil {
 		log.Printf("Error getting summary: %s", err)
 		http.Error(w, err.Error(), http.StatusOK)
@@ -71,8 +63,7 @@ func TranslateHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(TranslationResponse{
-		Translation:   translation,
-		InputSummary:  inputSummary,
-		OutputSummary: outputSummary,
+		Translation: translation,
+		Summary:     summary,
 	})
 }
