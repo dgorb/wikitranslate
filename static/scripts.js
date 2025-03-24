@@ -1,4 +1,5 @@
 let languages = {};
+let currentSummaryView = "output";
 
 async function populateLanguageDropdowns() {
   try {
@@ -44,6 +45,21 @@ async function populateLanguageDropdowns() {
   document.getElementById("input").focus();
 }
 
+function swapSummary() {
+  const summaryDiv = document.getElementById("summary");
+  const swapButton = document.getElementById("swapSummaryButton");
+  const inputSummary = summaryDiv.getAttribute("data-input-summary");
+  const outputSummary = summaryDiv.getAttribute("data-output-summary");
+
+  if (currentSummaryView === "output") {
+    summaryDiv.innerHTML = inputSummary;
+    currentSummaryView = "input";
+  } else {
+    summaryDiv.innerHTML = outputSummary;
+    currentSummaryView = "output";
+  }
+}
+
 async function performTranslation() {
   const inputLang = document.getElementById("inputLang").value;
   const outputLang = document.getElementById("outputLang").value;
@@ -52,7 +68,10 @@ async function performTranslation() {
   const resultsDiv = document.getElementById("results");
   const translationDiv = document.getElementById("translation");
   const summaryDiv = document.getElementById("summary");
+  const swapButton = document.getElementById("swapSummaryButton");
+
   resultsDiv.classList.remove("hidden");
+  swapButton.classList.remove("hidden");
 
   try {
     const response = await fetch(
@@ -61,17 +80,23 @@ async function performTranslation() {
     const data = await response.json();
     console.log(data);
     if (response.ok) {
-      console.log(data);
       translationDiv.innerHTML = `${inputVal.charAt(0).toUpperCase() + inputVal.slice(1)} (${inputLang})  →  ${data.translation} (${outputLang})`;
-      summaryDiv.innerHTML =
-        `${data.inputSummary}` + "<br><br>" + `${data.outputSummary}`;
+
+      summaryDiv.setAttribute("data-input-summary", data.inputSummary);
+      summaryDiv.setAttribute("data-output-summary", data.outputSummary);
+
+      summaryDiv.innerHTML = data.outputSummary;
+      currentSummaryView = "output";
+      swapButton.textContent = "🔁";
     } else {
       translationDiv.innerHTML = "Error translating";
       summaryDiv.innerHTML = "";
+      swapButton.classList.add("hidden");
     }
   } catch (error) {
     translationDiv.innerHTML = "Translation not found";
     summaryDiv.innerHTML = "";
+    swapButton.classList.add("hidden");
   }
 
   input.value = "";
