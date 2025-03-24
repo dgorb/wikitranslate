@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/dgorb/wikitranslate/service"
 	"github.com/dgorb/wikitranslate/utils"
@@ -27,7 +28,7 @@ func TranslatePageHandler(w http.ResponseWriter, r *http.Request) {
 func TranslateHandler(w http.ResponseWriter, r *http.Request) {
 	inputLang := r.URL.Query().Get("inputLang")
 	outputLang := r.URL.Query().Get("outputLang")
-	input := r.URL.Query().Get("input")
+	input := strings.TrimSpace(r.URL.Query().Get("input"))
 
 	if inputLang == "" || outputLang == "" || input == "" {
 		http.Error(w, "Missing required query parameters", http.StatusBadRequest)
