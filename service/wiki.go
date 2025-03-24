@@ -12,6 +12,10 @@ import (
 	"github.com/gocolly/colly"
 )
 
+func InitColly() *colly.Collector {
+	return colly.NewCollector(colly.CacheDir("./cache"))
+}
+
 func GetSummary(c *colly.Collector, lang, input string) (string, error) {
 	url := makeUrl(lang, input)
 

@@ -8,7 +8,6 @@ import (
 
 	"github.com/dgorb/wikitranslate/service"
 	"github.com/dgorb/wikitranslate/utils"
-	"github.com/gocolly/colly"
 )
 
 type TranslationResponse struct {
@@ -45,15 +44,13 @@ func TranslateHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	c := colly.NewCollector()
-
+	c := service.InitColly()
 	translation, err := service.GetTranslation(c, inputLang, outputLang, input)
 	if err != nil {
 		log.Printf("Error translating: %s", err)
 		http.Error(w, err.Error(), http.StatusOK)
 		return
 	}
-
 	summary, err := service.GetSummary(c, outputLang, translation)
 	if err != nil {
 		log.Printf("Error getting summary: %s", err)
