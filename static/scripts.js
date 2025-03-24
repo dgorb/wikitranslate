@@ -70,10 +70,8 @@ async function performTranslation() {
   const resultsDiv = document.getElementById("results");
   const translationDiv = document.getElementById("translation");
   const summaryDiv = document.getElementById("summary");
-  const swapButton = document.getElementById("swapSummaryButton");
 
   resultsDiv.classList.remove("hidden");
-  swapButton.classList.remove("hidden");
 
   try {
     const response = await fetch(
@@ -86,17 +84,14 @@ async function performTranslation() {
 
       summaryDiv.innerHTML = data.summary;
       currentSummaryView = "output";
-      swapButton.textContent = "🔁";
     } else {
       translationDiv.innerHTML = "Error translating";
       summaryDiv.innerHTML = "";
-      swapButton.classList.add("hidden");
     }
   } catch (error) {
     console.log(error);
     translationDiv.innerHTML = "Translation not found";
     summaryDiv.innerHTML = "";
-    swapButton.classList.add("hidden");
   }
 
   if (inputVal) {

@@ -15,7 +15,8 @@ func SetupMiddleware(r *chi.Mux) {
 	r.Use(middleware.Recoverer)
 	r.Use(middleware.Timeout(60 * time.Second))
 
-	r.Use(CSPMiddleware)
+	// TODO: Look into re-enabling.
+	// r.Use(CSPMiddleware)
 }
 
 func CSPMiddleware(next http.Handler) http.Handler {
@@ -23,6 +24,7 @@ func CSPMiddleware(next http.Handler) http.Handler {
 		w.Header().Set("Content-Security-Policy",
 			"default-src 'self'; "+
 				"script-src 'self' 'unsafe-inline' cdn.tailwindcss.com; "+
+				"style-src 'self' 'unsafe-inline' kit.fontawesome.com; "+
 				"style-src 'self' 'unsafe-inline' fonts.googleapis.com; "+
 				"font-src fonts.gstatic.com;")
 

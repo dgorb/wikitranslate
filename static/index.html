@@ -10,6 +10,7 @@
         />
         <script src="/scripts.js"></script>
         <script src="https://cdn.tailwindcss.com"></script>
+        <script src="https://kit.fontawesome.com/d6382db5a1.js"></script>
         <script>
             tailwind.config = {
                 theme: {
@@ -59,12 +60,20 @@
                             class="p-2 border border-gray-300 rounded-sm shadow-md focus:outline-none"
                         />
                     </div>
-                    <button
-                        onclick="performTranslation()"
-                        class="w-full bg-blue-200 text-black py-2 px-4 rounded-sm shadow-md border border-[1px] border-blue-300 hover:bg-blue-300 hover:border-blue-400 transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                        Translate
-                    </button>
+                    <div class="flex flex-row">
+                        <button
+                            onclick="performTranslation()"
+                            class="w-full bg-blue-200 text-black py-2 rounded-sm shadow-md border border-[1px] border-blue-300 hover:bg-blue-300 hover:border-blue-400 transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                            Translate
+                        </button>
+                        <button
+                            class="w-auto bg-blue-200 text-black py-2 px-4 ml-2 rounded-sm shadow-md border border-[1px] border-blue-300 hover:bg-blue-300 hover:border-blue-400 transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            onclick="swapLanguage()"
+                        >
+                            <i class="fa-solid fa-rotate text-gray-500"></i>
+                        </button>
+                    </div>
                     <div
                         id="results"
                         class="mt-4 p-4 border border-[1px] shadow-md border-gray-200 rounded-sm bg-gray-50 font-light hidden"
@@ -74,13 +83,6 @@
                             id="summary"
                             class="mt-2 text-gray-500 text-xs italic border-l-[1px] border-gray-400 ml-1 pl-3"
                         ></div>
-                        <div class="flex justify-end mt-2 !text-lg">
-                            <button
-                                id="swapSummaryButton"
-                                onclick="swapLanguage()"
-                                class="text-xs text-blue-600 hover:text-blue-800 focus:outline-none hidden"
-                            ></button>
-                        </div>
                     </div>
                 </div>
             </div>
