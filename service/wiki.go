@@ -12,16 +12,27 @@ import (
 	"github.com/gocolly/colly"
 )
 
-func InitColly() *colly.Collector {
+func initColly() *colly.Collector {
 	return colly.NewCollector(colly.CacheDir("./cache"))
 }
 
-func GetSummary(c *colly.Collector, lang, input string) (string, error) {
+type Wiki struct {
+	collector *colly.Collector
+}
+
+func NewWiki() *Wiki {
+	c := initColly()
+	return &Wiki{
+		collector: c,
+	}
+}
+
+func (w *Wiki) GetSummary(lang, input string) (string, error) {
 	url := makeUrl(lang, input)
 
 	var summary string
 	var foundFirstParagraph bool
-	c.OnHTML(".mw-parser-output p", func(e *colly.HTMLElement) {
+	w.collector.OnHTML(".mw-parser-output p", func(e *colly.HTMLElement) {
 		if !foundFirstParagraph {
 			summary = strings.TrimSpace(e.Text)
 			if summary != "" {
@@ -31,7 +42,7 @@ func GetSummary(c *colly.Collector, lang, input string) (string, error) {
 			}
 		}
 	})
-	err := c.Visit(url)
+	err := w.collector.Visit(url)
 	if err != nil {
 		log.Printf("Error: %s", err)
 		return "", err
@@ -39,19 +50,19 @@ func GetSummary(c *colly.Collector, lang, input string) (string, error) {
 	return summary, nil
 }
 
-func GetTranslation(c *colly.Collector, inputLang, outputLang, input string) (string, error) {
+func (w *Wiki) GetTranslation(inputLang, outputLang, input string) (string, error) {
 	url := makeUrl(inputLang, input)
 	availableLanguages := map[string]string{}
 
 	var translation string
-	c.OnHTML(`.interlanguage-link-target`, func(e *colly.HTMLElement) {
+	w.collector.OnHTML(`.interlanguage-link-target`, func(e *colly.HTMLElement) {
 		langCode := e.Attr("lang")
 		availableLanguages[langCode] = utils.LanguageByCode(langCode)
 		if langCode == outputLang {
 			translation = strings.Split(e.Attr("title"), " – ")[0]
 		}
 	})
-	err := c.Visit(url)
+	err := w.collector.Visit(url)
 	if err != nil {
 		return "", err
 	}

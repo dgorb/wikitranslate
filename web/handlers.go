@@ -44,14 +44,14 @@ func TranslateHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	c := service.InitColly()
-	translation, err := service.GetTranslation(c, inputLang, outputLang, input)
+	wiki := service.NewWiki()
+	translation, err := wiki.GetTranslation(inputLang, outputLang, input)
 	if err != nil {
 		log.Printf("Error translating: %s", err)
 		http.Error(w, err.Error(), http.StatusOK)
 		return
 	}
-	summary, err := service.GetSummary(c, outputLang, translation)
+	summary, err := wiki.GetSummary(outputLang, translation)
 	if err != nil {
 		log.Printf("Error getting summary: %s", err)
 		http.Error(w, err.Error(), http.StatusOK)
