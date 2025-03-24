@@ -15,12 +15,15 @@ func NewRouter() *chi.Mux {
 
 	// Serve static files
 	fileServer := http.FileServer(http.Dir("static"))
-	r.Handle("/", fileServer)
-	r.Handle("/scripts.js", fileServer)
+	r.Handle("/*", fileServer)
+
+	r.Get("/translate", TranslatePageHandler)
 
 	// API endpoints
-	r.Get("/languages", GetLanguagesHandler)
-	r.Get("/translate", TranslateHandler)
+	r.Route("/api", func(r chi.Router) {
+		r.Get("/languages", GetLanguagesHandler)
+		r.Get("/translate", TranslateHandler)
+	})
 
 	return r
 }

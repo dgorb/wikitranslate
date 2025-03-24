@@ -22,6 +22,10 @@ func GetLanguagesHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(utils.Languages())
 }
 
+func TranslatePageHandler(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "static/index.html")
+}
+
 func TranslateHandler(w http.ResponseWriter, r *http.Request) {
 	inputLang := r.URL.Query().Get("inputLang")
 	outputLang := r.URL.Query().Get("outputLang")

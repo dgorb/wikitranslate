@@ -3,7 +3,7 @@ let currentSummaryView = "output";
 
 async function populateLanguageDropdowns() {
   try {
-    const response = await fetch("/languages");
+    const response = await fetch("/api/languages");
     if (!response.ok) {
       throw new Error("Failed to fetch languages");
     }
@@ -75,7 +75,7 @@ async function performTranslation() {
 
   try {
     const response = await fetch(
-      `/translate?inputLang=${inputLang}&outputLang=${outputLang}&input=${encodeURIComponent(inputVal)}`,
+      `/api/translate?inputLang=${inputLang}&outputLang=${outputLang}&input=${encodeURIComponent(inputVal)}`,
     );
     const data = await response.json();
     console.log(data);
@@ -99,14 +99,41 @@ async function performTranslation() {
     swapButton.classList.add("hidden");
   }
 
-  input.value = "";
   setTimeout(() => {
     input.focus();
     input.click();
   }, 100);
 
+  if (inputVal) {
+    const newUrl = `/translate?inputLang=${inputLang}&outputLang=${outputLang}&input=${encodeURIComponent(inputVal)}`;
+    window.history.pushState({ path: newUrl }, "", newUrl);
+  }
+
   localStorage.setItem("lastInputLang", inputLang);
   localStorage.setItem("lastOutputLang", outputLang);
 }
 
-document.addEventListener("DOMContentLoaded", populateLanguageDropdowns);
+function checkUrlForTranslation() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const inputLang = urlParams.get("inputLang");
+  const outputLang = urlParams.get("outputLang");
+  const input = urlParams.get("input");
+
+  if (inputLang && outputLang && input) {
+    setTimeout(() => {
+      document.getElementById("inputLang").value = inputLang;
+      document.getElementById("outputLang").value = outputLang;
+      document.getElementById("input").value = input;
+
+      performTranslation();
+
+      const newUrl = `/translate?inputLang=${inputLang}&outputLang=${outputLang}&input=${encodeURIComponent(input)}`;
+      window.history.pushState({ path: newUrl }, "", newUrl);
+    }, 50);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  populateLanguageDropdowns();
+  checkUrlForTranslation();
+});
