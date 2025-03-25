@@ -103,7 +103,7 @@ async function performTranslation() {
   localStorage.setItem("lastOutputLang", outputLang);
 }
 
-function checkUrlForTranslation() {
+async function checkUrlForTranslation() {
   const urlParams = new URLSearchParams(window.location.search);
   const inputLang = urlParams.get("inputLang");
   const outputLang = urlParams.get("outputLang");
@@ -123,7 +123,7 @@ function checkUrlForTranslation() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  populateLanguageDropdowns();
+document.addEventListener("DOMContentLoaded", async () => {
+  await populateLanguageDropdowns();
   checkUrlForTranslation();
 });
