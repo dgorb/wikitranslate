@@ -41,7 +41,7 @@ async function populateLanguageDropdowns() {
     resultDiv.innerHTML = `<div class="text-red-600">Error loading languages: ${error.message}</div>`;
   }
 
-  document.getElementById("input").focus();
+  // document.getElementById("input").focus();
 }
 
 async function swapLanguage() {
