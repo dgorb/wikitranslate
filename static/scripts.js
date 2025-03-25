@@ -30,7 +30,7 @@ async function populateLanguageDropdowns() {
           ? code
           : localStorage.getItem("lastInputLang") || inputLang.value;
       outputLang.value =
-        code === "nb"
+        code === "no"
           ? code
           : localStorage.getItem("lastOutputLang") || outputLang.value;
     }

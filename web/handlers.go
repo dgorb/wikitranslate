@@ -45,14 +45,14 @@ func TranslateHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	wiki := service.NewWiki()
-	translation, err := wiki.GetTranslation(inputLang, outputLang, input)
+	wiki := service.NewWikiClient()
+	translation, err := wiki.GetTranslation(r.Context(), inputLang, outputLang, input)
 	if err != nil {
 		log.Printf("Error translating: %s", err)
 		http.Error(w, err.Error(), http.StatusOK)
 		return
 	}
-	summary, err := wiki.GetSummary(outputLang, translation)
+	summary, err := wiki.GetSummary(r.Context(), outputLang, translation)
 	if err != nil {
 		log.Printf("Error getting summary: %s", err)
 		http.Error(w, err.Error(), http.StatusOK)

@@ -105,7 +105,7 @@ var languageMap = map[string]string{
 	"ne":       "Nepali",
 	"nl":       "Dutch",
 	"nn":       "Norwegian (Nynorsk)",
-	"nb":       "Norwegian (Bokmål)",
+	"no":       "Norwegian (Bokmål)",
 	"nso":      "Northern Sotho",
 	"ny":       "Chichewa",
 	"oc":       "Occitan",
