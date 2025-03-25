@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="light">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -13,42 +13,68 @@
         <script src="https://kit.fontawesome.com/d6382db5a1.js"></script>
         <script>
             tailwind.config = {
+                darkMode: "class",
                 theme: {
                     extend: {
                         fontFamily: {
                             sans: ["Inter", "sans-serif"],
+                        },
+                        colors: {
+                            mirage: {
+                                bg: "#1f2430",
+                                panel: "#232834",
+                                border: "#101521",
+                                accent: "#ffcc66",
+                                text: "#cbccc6",
+                                muted: "#707a8c",
+                                button: "#34455a",
+                                buttonhover: "#3c526b",
+                            },
                         },
                     },
                 },
             };
         </script>
     </head>
-    <body class="bg-gray-100 font-extralight">
-        <div class="w-full bg-gray-50 shadow-md border-b-[1px] border-blue-200">
-            <div class="max-w-3xl mx-auto bg-gray-50">
-                <a href="/" class="text-black">
-                    <h1 class="text-xl lowercase py-4 text-center">
-                        wikitranslate
-                    </h1>
+    <body
+        class="bg-gray-100 dark:bg-mirage-bg font-extralight text-gray-900 dark:text-mirage-text transition-colors duration-200"
+    >
+        <div
+            class="w-full bg-gray-50 dark:bg-mirage-panel shadow-md border-b-[1px] border-blue-200 dark:border-mirage-border"
+        >
+            <div
+                class="max-w-3xl mx-auto bg-gray-50 dark:bg-mirage-panel flex justify-between items-center px-4"
+            >
+                <a href="/" class="text-black dark:text-mirage-text">
+                    <h1 class="text-xl lowercase py-4">wikitranslate</h1>
                 </a>
+                <button
+                    id="theme-toggle"
+                    class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-mirage-button transition"
+                >
+                    <i class="fa-solid fa-moon dark:hidden"></i>
+                    <i
+                        class="fa-solid fa-sun hidden dark:block text-mirage-accent"
+                    ></i>
+                </button>
             </div>
         </div>
         <div class="max-w-3xl mx-auto p-5">
             <div
-                class="bg-white p-6 rounded-md shadow-lg border-[1px] border-blue-200 inset-shadow-sm shadow-[0_4px_0_0_rgba(0,0,0,0.2)]"
+                class="bg-white dark:bg-mirage-panel p-6 rounded-md shadow-lg border-[1px] border-blue-200 dark:border-mirage-border inset-shadow-sm shadow-[0_4px_0_0_rgba(0,0,0,0.2)] dark:shadow-[0_4px_0_0_rgba(0,0,0,0.4)]"
             >
                 <div class="space-y-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="flex flex-col">
                             <select
                                 id="inputLang"
-                                class="p-2 border border-gray-300 rounded-sm shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                class="p-2 border border-gray-300 dark:border-mirage-border rounded-sm shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-mirage-accent bg-white dark:bg-mirage-bg dark:text-mirage-text"
                             ></select>
                         </div>
                         <div class="flex flex-col">
                             <select
                                 id="outputLang"
-                                class="p-2 border border-gray-300 rounded-sm shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                class="p-2 border border-gray-300 dark:border-mirage-border rounded-sm shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-mirage-accent bg-white dark:bg-mirage-bg dark:text-mirage-text"
                             ></select>
                         </div>
                     </div>
@@ -57,31 +83,36 @@
                             type="text"
                             id="input"
                             placeholder="Enter word or phrase"
-                            class="p-2 border border-gray-300 rounded-sm shadow-md focus:outline-none"
+                            class="p-2 border border-gray-300 dark:border-mirage-border rounded-sm shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-mirage-accent bg-white dark:bg-mirage-bg dark:text-mirage-text dark:placeholder-mirage-muted"
                         />
                     </div>
                     <div class="flex flex-row">
                         <button
                             onclick="performTranslation()"
-                            class="w-full bg-blue-200 text-black py-2 rounded-sm shadow-md border border-[1px] border-blue-300 hover:bg-blue-300 hover:border-blue-400 transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            class="w-full bg-blue-200 dark:bg-mirage-button text-black dark:text-mirage-text py-2 rounded-sm shadow-md border border-[1px] border-blue-300 dark:border-mirage-border hover:bg-blue-300 dark:hover:bg-mirage-buttonhover hover:border-blue-400 dark:hover:border-mirage-muted transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-mirage-accent"
                         >
                             Translate
                         </button>
                         <button
-                            class="w-auto bg-blue-200 text-black py-2 px-4 ml-2 rounded-sm shadow-md border border-[1px] border-blue-300 hover:bg-blue-300 hover:border-blue-400 transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            class="w-auto bg-blue-200 dark:bg-mirage-button text-black dark:text-mirage-text py-2 px-4 ml-2 rounded-sm shadow-md border border-[1px] border-blue-300 dark:border-mirage-border hover:bg-blue-300 dark:hover:bg-mirage-buttonhover hover:border-blue-400 dark:hover:border-mirage-muted transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-mirage-accent"
                             onclick="swapLanguage()"
                         >
-                            <i class="fa-solid fa-rotate text-gray-500"></i>
+                            <i
+                                class="fa-solid fa-rotate text-gray-500 dark:text-mirage-muted"
+                            ></i>
                         </button>
                     </div>
                     <div
                         id="results"
-                        class="mt-4 p-4 border border-[1px] shadow-md border-gray-200 rounded-sm bg-gray-50 font-light hidden"
+                        class="mt-4 p-4 border border-[1px] shadow-md border-gray-200 dark:border-mirage-border rounded-sm bg-gray-50 dark:bg-mirage-bg font-light hidden"
                     >
-                        <div id="translation"></div>
+                        <div
+                            id="translation"
+                            class="dark:text-mirage-text"
+                        ></div>
                         <div
                             id="summary"
-                            class="mt-2 text-gray-500 text-xs italic border-l-[1px] border-gray-400 ml-[2px] pl-3"
+                            class="mt-2 text-gray-500 dark:text-mirage-muted text-xs italic border-l-[1px] border-gray-400 dark:border-mirage-muted ml-[2px] pl-3"
                         ></div>
                     </div>
                 </div>
