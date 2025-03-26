@@ -61,11 +61,17 @@
             }
 
             .loading-animation {
-                animation: colorShift 2s ease-in-out infinite;
+                animation: colorShift 1s ease-in-out infinite;
+                animation-fill-mode: backwards;
+                will-change: background-color;
+                -webkit-animation: colorShift 1s ease-in-out infinite;
             }
 
             .dark .loading-animation {
-                animation: colorShiftDark 2s ease-in-out infinite;
+                animation: colorShiftDark 1s ease-out-in infinite;
+                animation-fill-mode: backwards;
+                will-change: background-color;
+                -webkit-animation: colorShiftDark 1s ease-in-out infinite;
             }
         </style>
     </head>
