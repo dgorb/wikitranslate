@@ -176,8 +176,20 @@ function initThemeToggle() {
   });
 }
 
+// Make sure buttons don't get stuck having the hover color
+// after being pressed on mobile.
+function addTouchHandlers() {
+  const buttons = document.querySelectorAll("button");
+  buttons.forEach((button) => {
+    button.addEventListener("touchend", function () {
+      this.blur();
+    });
+  });
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
   initThemeToggle();
   await populateLanguageDropdowns();
   checkUrlForTranslation();
+  addTouchHandlers();
 });
