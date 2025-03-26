@@ -77,11 +77,19 @@ async function performTranslation() {
   resultsDiv.classList.remove("hidden");
   shareButton.classList.remove("hidden");
 
+  resultsDiv.classList.add("loading-animation");
+
+  translationDiv.innerHTML = "Translating...";
+  summaryDiv.innerHTML = "";
+
   try {
     const response = await fetch(
       `/api/translate?inputLang=${inputLang}&outputLang=${outputLang}&input=${encodeURIComponent(inputVal)}`,
     );
     const data = await response.json();
+
+    resultsDiv.classList.remove("loading-animation");
+
     if (response.ok) {
       translationDiv.setAttribute("data-translation", data.translation);
       translationDiv.innerHTML = `${inputVal.charAt(0).toUpperCase() + inputVal.slice(1)} (${inputLang})  →  ${data.translation} (${outputLang})`;
@@ -93,7 +101,7 @@ async function performTranslation() {
       summaryDiv.innerHTML = "";
     }
   } catch (error) {
-    console.log(error);
+    resultsDiv.classList.remove("loading-animation");
     translationDiv.innerHTML = "Translation not found";
     summaryDiv.innerHTML = "";
   }

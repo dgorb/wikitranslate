@@ -35,6 +35,39 @@
                 },
             };
         </script>
+        <style>
+            @keyframes colorShift {
+                0% {
+                    background-color: rgba(249, 250, 251, 1);
+                }
+                50% {
+                    background-color: rgba(219, 234, 254, 1);
+                }
+                100% {
+                    background-color: rgba(249, 250, 251, 1);
+                }
+            }
+
+            @keyframes colorShiftDark {
+                0% {
+                    background-color: rgba(31, 36, 48, 1);
+                }
+                50% {
+                    background-color: rgba(49, 65, 89, 1);
+                }
+                100% {
+                    background-color: rgba(31, 36, 48, 1);
+                }
+            }
+
+            .loading-animation {
+                animation: colorShift 2s ease-in-out infinite;
+            }
+
+            .dark .loading-animation {
+                animation: colorShiftDark 2s ease-in-out infinite;
+            }
+        </style>
     </head>
     <body
         class="bg-gray-100 dark:bg-mirage-bg font-extralight text-gray-900 dark:text-mirage-text transition-colors duration-200"
