@@ -52,14 +52,14 @@
                     <button
                         id="share-button"
                         onclick="shareUrl()"
-                        class="p-2 mr-2 rounded-full hover:bg-gray-200 dark:hover:bg-mirage-button transition focus:outline-none focus:bg-transparent dark:focus:bg-transparent"
+                        class="mr-2 rounded-full hover:bg-gray-200 dark:hover:bg-mirage-button hidden"
                         title="Share this page"
                     >
                         <i class="fa-solid fa-share-nodes"></i>
                     </button>
                     <button
                         id="theme-toggle"
-                        class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-mirage-button transition focus:outline-none focus:bg-transparent dark:focus:bg-transparent"
+                        class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-mirage-button"
                     >
                         <i class="fa-solid fa-moon dark:hidden"></i>
                         <i
@@ -69,7 +69,7 @@
                 </div>
             </div>
         </div>
-        <div class="max-w-3xl mx-auto p-5">
+        <div class="max-w-3xl mx-auto p-5 mt-10">
             <div
                 class="bg-white dark:bg-mirage-panel p-6 rounded-md shadow-lg border-[1px] border-blue-200 dark:border-mirage-border inset-shadow-sm shadow-[4px_4px_0_0_rgba(0,0,0,0.2)] dark:shadow-[4px_4px_0_0_rgba(0,0,0,0.4)]"
             >
@@ -99,12 +99,12 @@
                     <div class="flex flex-row">
                         <button
                             onclick="performTranslation()"
-                            class="w-full bg-blue-200 dark:bg-mirage-button text-black dark:text-mirage-text py-2 rounded-sm shadow-md border border-[1px] border-blue-300 dark:border-mirage-border hover:bg-blue-300 dark:hover:bg-mirage-buttonhover hover:border-blue-400 dark:hover:border-mirage-muted transition duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:focus-visible:ring-mirage-accent transparent active:bg-transparent"
+                            class="w-full bg-blue-200 dark:bg-mirage-button text-black dark:text-mirage-text py-2 rounded-sm shadow-md border border-[1px] border-blue-300 dark:border-mirage-border hover:bg-blue-300 dark:hover:bg-mirage-buttonhover hover:border-blue-400 dark:hover:border-mirage-muted transition duration-200"
                         >
                             Translate
                         </button>
                         <button
-                            class="w-auto bg-blue-200 dark:bg-mirage-button text-black dark:text-mirage-text py-2 px-4 ml-2 rounded-sm shadow-md border border-[1px] border-blue-300 dark:border-mirage-border hover:bg-blue-300 dark:hover:bg-mirage-buttonhover hover:border-blue-400 dark:hover:border-mirage-muted transition duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:focus-visible:ring-mirage-accent"
+                            class="w-auto bg-blue-200 dark:bg-mirage-button text-black dark:text-mirage-text py-2 px-4 ml-2 rounded-sm shadow-md border border-[1px] border-blue-300 dark:border-mirage-border hover:bg-blue-300 dark:hover:bg-mirage-buttonhover hover:border-blue-400 dark:hover:border-mirage-muted transition duration-200"
                             onclick="swapLanguage()"
                         >
                             <i

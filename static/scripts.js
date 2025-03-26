@@ -59,7 +59,9 @@ async function swapLanguage() {
   ];
   inputEl.value = input;
 
-  performTranslation();
+  if (input !== null) {
+    performTranslation();
+  }
 }
 
 async function performTranslation() {
@@ -70,8 +72,10 @@ async function performTranslation() {
   const resultsDiv = document.getElementById("results");
   const translationDiv = document.getElementById("translation");
   const summaryDiv = document.getElementById("summary");
+  const shareButton = document.getElementById("share-button");
 
   resultsDiv.classList.remove("hidden");
+  shareButton.classList.remove("hidden");
 
   try {
     const response = await fetch(
@@ -114,6 +118,7 @@ async function checkUrlForTranslation() {
       document.getElementById("inputLang").value = inputLang;
       document.getElementById("outputLang").value = outputLang;
       document.getElementById("input").value = input;
+      document.getElementById("share-button").classList.remove("hidden");
 
       performTranslation();
 
