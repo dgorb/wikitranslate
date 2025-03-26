@@ -46,17 +46,27 @@
                 class="max-w-3xl mx-auto bg-gray-50 dark:bg-mirage-panel flex justify-between items-center px-4"
             >
                 <a href="/" class="text-black dark:text-mirage-text">
-                    <h1 class="text-xl lowercase py-4">wikitranslate</h1>
+                    <h1 class="text-xl lowercase py-4 pl-2">wikitranslate</h1>
                 </a>
-                <button
-                    id="theme-toggle"
-                    class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-mirage-button transition focus:outline-none focus:bg-transparent dark:focus:bg-transparent"
-                >
-                    <i class="fa-solid fa-moon dark:hidden"></i>
-                    <i
-                        class="fa-solid fa-sun hidden dark:block text-mirage-accent"
-                    ></i>
-                </button>
+                <div class="flex items-center">
+                    <button
+                        id="share-button"
+                        onclick="shareUrl()"
+                        class="p-2 mr-2 rounded-full hover:bg-gray-200 dark:hover:bg-mirage-button transition focus:outline-none focus:bg-transparent dark:focus:bg-transparent"
+                        title="Share this page"
+                    >
+                        <i class="fa-solid fa-share-nodes"></i>
+                    </button>
+                    <button
+                        id="theme-toggle"
+                        class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-mirage-button transition focus:outline-none focus:bg-transparent dark:focus:bg-transparent"
+                    >
+                        <i class="fa-solid fa-moon dark:hidden"></i>
+                        <i
+                            class="fa-solid fa-sun hidden dark:block text-mirage-accent"
+                        ></i>
+                    </button>
+                </div>
             </div>
         </div>
         <div class="max-w-3xl mx-auto p-5">

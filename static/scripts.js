@@ -123,6 +123,21 @@ async function checkUrlForTranslation() {
   }
 }
 
+function shareUrl() {
+  if (navigator.share) {
+    navigator
+      .share({
+        title: "wikitranslate",
+        url: window.location.href,
+      })
+      .catch((error) => console.error("Error sharing:", error));
+  } else {
+    alert(
+      "Sharing is not supported in your browser. You can copy the URL manually.",
+    );
+  }
+}
+
 function initThemeToggle() {
   const themeToggleBtn = document.getElementById("theme-toggle");
   const htmlElement = document.documentElement;
