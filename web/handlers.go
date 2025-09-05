@@ -14,6 +14,7 @@ import (
 type TranslationResponse struct {
 	Translation string `json:"translation"`
 	Summary     string `json:"summary"`
+	Error       string `json:"error"`
 }
 
 func GetLanguagesHandler(w http.ResponseWriter, r *http.Request) {
@@ -29,6 +30,7 @@ func TranslateHandler(w http.ResponseWriter, r *http.Request) {
 	inputLang := r.URL.Query().Get("inputLang")
 	outputLang := r.URL.Query().Get("outputLang")
 	input := strings.TrimSpace(r.URL.Query().Get("input"))
+	readableErr := ""
 
 	if inputLang == "" || outputLang == "" || input == "" {
 		http.Error(w, "Missing required query parameters", http.StatusBadRequest)
@@ -49,19 +51,18 @@ func TranslateHandler(w http.ResponseWriter, r *http.Request) {
 	translation, err := wiki.GetTranslation(r.Context(), inputLang, outputLang, input)
 	if err != nil {
 		log.Printf("Error translating: %s", err)
-		http.Error(w, err.Error(), http.StatusOK)
-		return
+		readableErr = "An error has occured 😔"
 	}
 	summary, err := wiki.GetSummary(r.Context(), outputLang, translation)
 	if err != nil {
 		log.Printf("Error getting summary: %s", err)
-		http.Error(w, err.Error(), http.StatusOK)
-		return
+		readableErr = "An error has occured 🫠"
 	}
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(TranslationResponse{
 		Translation: translation,
 		Summary:     summary,
+		Error:       readableErr,
 	})
 }

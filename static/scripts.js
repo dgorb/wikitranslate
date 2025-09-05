@@ -91,6 +91,12 @@ async function performTranslation() {
     resultsDiv.classList.remove("loading-animation");
 
     if (response.ok) {
+      if (data.error !== "") {
+        translationDiv.innerHTML = data.error;
+        summaryDiv.innerHTML = "";
+        return;
+      }
+
       translationDiv.setAttribute("data-translation", data.translation);
       translationDiv.innerHTML = `${inputVal.charAt(0).toUpperCase() + inputVal.slice(1)} (${inputLang})  →  ${data.translation} (${outputLang})`;
 
@@ -102,7 +108,7 @@ async function performTranslation() {
     }
   } catch (error) {
     resultsDiv.classList.remove("loading-animation");
-    translationDiv.innerHTML = "Translation not found";
+    translationDiv.innerHTML = "Some error";
     summaryDiv.innerHTML = "";
   }
 
