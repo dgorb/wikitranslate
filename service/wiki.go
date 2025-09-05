@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"net/url"
@@ -101,12 +102,15 @@ func (w *WikiClient) GetSummary(ctx context.Context, lang, input string) (string
 }
 
 func (w *WikiClient) makeRequest(ctx context.Context, lang string, params url.Values) (*wikipediaAPIResponse, error) {
-	url := fmt.Sprintf(w.baseUrl, lang) + "?" + params.Encode()
+	// TODO: Look into compliance - https://wikitech.wikimedia.org/wiki/Robot_policy
 
+	url := fmt.Sprintf(w.baseUrl, lang) + "?" + params.Encode()
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
 		return nil, fmt.Errorf("creating request: %w", err)
 	}
+
+	req.Header.Set("User-Agent", "WikiTranslate/1.0 (https://wikitranslate.dev)")
 
 	resp, err := w.c.Do(req)
 	if err != nil {
@@ -118,9 +122,14 @@ func (w *WikiClient) makeRequest(ctx context.Context, lang string, params url.Va
 		return nil, fmt.Errorf("got non-OK status: %d", resp.StatusCode)
 	}
 
+	bodyBytes, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("Error reading response body: %w", err)
+	}
+
 	result := &wikipediaAPIResponse{}
-	if err := json.NewDecoder(resp.Body).Decode(result); err != nil {
-		return nil, fmt.Errorf("failed to parse JSON: %w", err)
+	if err := json.Unmarshal(bodyBytes, result); err != nil {
+		return nil, fmt.Errorf("failed to parse JSON (body: %s): %w", string(bodyBytes), err)
 	}
 
 	return result, nil
