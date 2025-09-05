@@ -27,6 +27,8 @@ func TranslatePageHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func TranslateHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
 	inputLang := r.URL.Query().Get("inputLang")
 	outputLang := r.URL.Query().Get("outputLang")
 	input := strings.TrimSpace(r.URL.Query().Get("input"))
@@ -51,15 +53,21 @@ func TranslateHandler(w http.ResponseWriter, r *http.Request) {
 	translation, err := wiki.GetTranslation(r.Context(), inputLang, outputLang, input)
 	if err != nil {
 		log.Printf("Error translating: %s", err)
-		readableErr = "An error has occured 😔"
+		json.NewEncoder(w).Encode(TranslationResponse{
+			Error: "An error has occured 😔",
+		})
+		return
 	}
+
 	summary, err := wiki.GetSummary(r.Context(), outputLang, translation)
 	if err != nil {
 		log.Printf("Error getting summary: %s", err)
-		readableErr = "An error has occured 🫠"
+		json.NewEncoder(w).Encode(TranslationResponse{
+			Error: "An error has occured 😔",
+		})
+		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(TranslationResponse{
 		Translation: translation,
 		Summary:     summary,
